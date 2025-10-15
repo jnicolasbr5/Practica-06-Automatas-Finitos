@@ -10,6 +10,7 @@
 
 #include <sstream>
 #include <string>
+#include <vector>
 
 #include "estado.h"
 
@@ -29,7 +30,14 @@ void Estado::Read(std::istream& is) {
   }
 }
 
-
+bool Estado::AlgoritmoCadenas(const std::string& cadena, std::vector<Estado>& vec, int size, int i) {
+  if (aceptacion_ && size == i) return true; // Si está en estado de aceptación y ha leído todos los símbolos
+  auto par = transiciones_.equal_range(cadena[i]);
+  for (auto iterador = par.first; iterador != par.second; iterador++) {
+    return vec[iterador->second].AlgoritmoCadenas(cadena, vec, size, i + 1); 
+  }
+  return false;
+}
 
 std::istream& operator>>(std::istream& is, Estado& est) {
   est.Read(is);

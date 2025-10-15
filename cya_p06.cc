@@ -15,6 +15,7 @@
 // Referencias:
 // Map -> https://en.cppreference.com/w/cpp/containerr/map.html
 // Multimap -> https://learn.microsoft.com/es-es/cpp/standard-library/multimap-class?view=msvc-170
+// Find (Multimap) -> https://cplusplus.com/reference/map/multimap/find/
 // Historial de revisiones:
 // Main -> https://github.com/jnicolasbr5/Practica-02-Cadenas-y-lenguajes
 // 14/10/2025 - Creación (primera versión) del código 

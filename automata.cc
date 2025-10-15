@@ -44,9 +44,11 @@ void Automata::LeerCadenas(std::ifstream& archivo_entrada) {
 }
  
 bool Automata::ComprobarCadenas(const std::string& cadena) {
-  for (int i = 0; i < estados_.size(); i++) {
-    estados_[i];
+  for (char c : cadena) { // Cadena no coincide con alfabeto
+    if (alfabeto_.find(c) == alfabeto_.end()) return false; 
   }
+  std::vector<Estado> estados_automata = GetEstados();
+  return estados_[estado_inicial_].AlgoritmoCadenas(cadena, estados_automata, cadena.size());
 }
 
 void Automata::UnicoEstadoInicial(const std::string& estados_iniciales) {

@@ -22,14 +22,19 @@
 
 #include <iostream>
 #include <map>
+#include <set>
+#include <vector>
 
 class Estado{
   public:
   Estado() = default;
 
+  bool AlgoritmoCadenas(const std::string& cadena, std::vector<Estado>& vec, int size, int i = 0);
+
+  //bool GetAceptacion() const {return aceptacion_;}
+
   // Lectura
   void Read(std::istream& is);
-
 
   private:
     int numero_identificador_;  

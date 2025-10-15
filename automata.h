@@ -38,11 +38,16 @@ class Automata {
   void LeerCadenas(std::ifstream& archivo_entrada);
   bool ComprobarCadenas(const std::string& cadena);
 
+  
+
   private:
     std::set<char> alfabeto_;
     int numero_estados_;
     int estado_inicial_;
     std::vector<Estado> estados_;
+
+    // Get/Set
+    std::vector<Estado> GetEstados() const {return estados_;}
 
     // Push
     void InsertarSimbolos(const std::string& simbolos);
