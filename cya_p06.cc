@@ -26,6 +26,11 @@
 // https://github.com/jnicolasbr5/Practica-02-Cadenas-y-lenguajes/tree/dia3
 // ./p02_strings filein.txt fileout.txt codigo_operacion
 
+// ./p06_automata_simulator entrada2.fa entrada.txt
+
+
+// g++ -g -O0 -o mi_programa cya_p06.cc estado.cc automata.cc
+// gdb --args ./mi_programa entrada2.fa entrada.txt
 
 // DOXYGEN
 

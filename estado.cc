@@ -18,11 +18,11 @@ void Estado::Read(std::istream& is) {
   is >> numero_identificador_;
   int aceptacion;
   is >> aceptacion;
-  aceptacion_ = (aceptacion == 1) ? true : false; 
+  aceptacion_ = (aceptacion == 1); 
   is >> numero_transiciones_;
-  transiciones_.clear();
   char simbolo;
   int estado_destino;
+  transiciones_.clear();
   for (int i = 0; i < numero_transiciones_; i++) {
     is >> simbolo;
     is >> estado_destino;
