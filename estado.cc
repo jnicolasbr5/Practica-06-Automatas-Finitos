@@ -10,6 +10,7 @@
 
 #include <sstream>
 #include <string>
+#include <set>
 #include <vector>
 
 #include "estado.h"
@@ -32,15 +33,35 @@ void Estado::Read(std::istream& is) {
   }
 }
 
-bool Estado::AlgoritmoCadenas(const std::string& cadena, std::vector<Estado>& vec, int size, int i) {
+bool Estado::AlgoritmoCadenas(const std::string& cadena, std::vector<Estado>& vec, 
+                              const std::set<int> identificadores, int size, int i) {
   if (aceptacion_ && size == i) return true; // Si está en estado de aceptación y ha leído todos los símbolos
   auto par = transiciones_.equal_range(cadena[i]);
   for (auto iterador = par.first; iterador != par.second; iterador++) {
-    if (vec[iterador->second].AlgoritmoCadenas(cadena, vec, size, i + 1)) {
+    ComprobarSimbolosEstados(identificadores, iterador->second); // Comprobar error 5
+    if (vec[iterador->second].AlgoritmoCadenas(cadena, vec, identificadores, size, i + 1)) {
       return true;
     } 
   }
   return false;
+}
+
+void Estado::ComprobarSimbolosTransiciones(const std::set<char>& alfabeto) const { // Error 3
+  for (const auto& par : transiciones_) { // Itero cada par
+    if (alfabeto.find(par.first) == alfabeto.end()) { // Si no está en el alfabeto, error
+      std::cerr << "ERROR:" << std::endl;
+      std::cerr << "El símbolo " << par.first << " no forma parte del alfabeto." << std::endl;
+      exit(1);
+    }
+  }
+}
+
+void Estado::ComprobarSimbolosEstados(const std::set<int>& identificadores, int ident) const { // Error 5
+  if (identificadores.find(ident) == identificadores.end()) {
+    std::cerr << "ERROR: " << std::endl; // Si no existe el estado, da error
+    std::cerr << "El estado '" << ident << "' al que se quiere transitar no es parte del autómata." << std::endl;
+    exit(1);
+  }
 }
 
 std::istream& operator>>(std::istream& is, Estado& est) {

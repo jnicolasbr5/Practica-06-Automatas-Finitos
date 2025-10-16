@@ -36,12 +36,13 @@ class Automata {
   void Read(std::ifstream& archivo_entrada);
   void LeerCadenas(std::ifstream& archivo_entrada);
   bool ComprobarCadenas(const std::string& cadena);
-
+  
   private:
     std::set<char> alfabeto_;
     int numero_estados_;
     int estado_inicial_;
     std::vector<Estado> estados_;
+    std::set<int> identificadores_estados;
 
     // Get/Set
     std::vector<Estado> GetEstados() const {return estados_;}
@@ -51,6 +52,7 @@ class Automata {
 
     // Comprobar si hay error
     void UnicoEstadoInicial(const std::string& estados_iniciales);
+    void LineaPorEstado(int numero_lineas, int numero_estados) const;
 };
 
 #endif 

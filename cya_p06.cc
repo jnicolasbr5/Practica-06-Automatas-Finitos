@@ -22,7 +22,7 @@
 // -> https://github.com/jnicolasbr5/Practica-02-Cadenas-y-lenguajes/tree/dia1
 // 15/10/2025 - Segunda versión del código -> 
 // https://github.com/jnicolasbr5/Practica-02-Cadenas-y-lenguajes/tree/dia2
-// 20/09/2025 - Tercera versión del código -> 
+// 16/10/2025 - Tercera versión del código -> 
 // https://github.com/jnicolasbr5/Practica-02-Cadenas-y-lenguajes/tree/dia3
 // ./p02_strings filein.txt fileout.txt codigo_operacion
 

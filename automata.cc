@@ -12,6 +12,7 @@
 #include <fstream>
 #include <iostream>
 #include <limits>
+#include <set>
 #include <sstream>
 #include <string>
 
@@ -27,12 +28,14 @@ void Automata::Read(std::ifstream& archivo_entrada) {
   archivo_entrada.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Lee la siguiente linea
   std::string estados_iniciales;
   std::getline(archivo_entrada, estados_iniciales);
-  UnicoEstadoInicial(estados_iniciales); // Verifico un único estado inicial
+  UnicoEstadoInicial(estados_iniciales); // Verifico un único estado inicial, error 1
   Estado state;
   while(archivo_entrada >> state) {
+    state.ComprobarSimbolosTransiciones(alfabeto_); // Comprobar error 3
     estados_.push_back(state);
+    identificadores_estados.insert(state.GetNumeroIdentificador());
   }
-  
+  LineaPorEstado(estados_.size(), numero_estados_);
 }
 
 void Automata::LeerCadenas(std::ifstream& archivo_entrada) {
@@ -49,7 +52,7 @@ bool Automata::ComprobarCadenas(const std::string& cadena) {
     if (alfabeto_.find(c) == alfabeto_.end()) return false; 
   }
   std::vector<Estado> estados_automata = GetEstados();
-  return estados_[estado_inicial_].AlgoritmoCadenas(cadena, estados_automata, cadena.size());
+  return estados_[estado_inicial_].AlgoritmoCadenas(cadena, estados_automata, identificadores_estados, cadena.size());
 }
 
 void Automata::UnicoEstadoInicial(const std::string& estados_iniciales) {
@@ -57,8 +60,19 @@ void Automata::UnicoEstadoInicial(const std::string& estados_iniciales) {
   ss >> estado_inicial_; // Guardo el estado inicial
   std::string demas;
   if (ss >> demas) { // Error 1: Si hay más de un estado inicial, se lanza un error
-    std::cerr << "Error: hay más de un estado inicial." << std::endl;
+    std::cerr << "ERROR:" << std::endl;
+    std::cerr << "Hay más de un estado inicial." << std::endl;
     exit(1); 
+  }
+}
+
+void Automata::LineaPorEstado(int num_lineas, int num_estados) const {
+  if (num_lineas != num_estados) {
+    std::cerr << "ERROR:" << std::endl;
+    std::cerr << "El número de líneas (" << num_lineas << ") no corresponde "
+              << "con el número de estados (" << num_estados << ")." << std::endl;
+    std::cerr << "Cada estado debe tener información, aunque no tenga transiciones salientes." << std::endl;
+    exit(1);
   }
 }
 

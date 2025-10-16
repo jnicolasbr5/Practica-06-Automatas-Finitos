@@ -30,10 +30,17 @@ class Estado {
   public:
   Estado() = default;
 
-  bool AlgoritmoCadenas(const std::string& cadena, std::vector<Estado>& vec, int size, int i = 0);
+  // Algoritmo recursivo
+  bool AlgoritmoCadenas(const std::string& cadena, std::vector<Estado>& vec, 
+                        const std::set<int> identificadores, int size, int i = 0);
 
-  //bool GetAceptacion() const {return aceptacion_;}
 
+  // Detección de errores
+  void ComprobarSimbolosTransiciones(const std::set<char>& alfabeto) const;
+  void ComprobarSimbolosEstados(const std::set<int>& identificadores_estados, int identificador) const;
+
+  // Get
+  int GetNumeroIdentificador() const {return numero_identificador_;}
 
   // Lectura
   void Read(std::istream& is);
@@ -42,7 +49,7 @@ class Estado {
     int numero_identificador_;  
     bool aceptacion_; 
     int numero_transiciones_;
-    std::multimap<char, int> transiciones_; 
+    std::multimap<char, int> transiciones_;
 };
 
 std::istream& operator>>(std::istream& is, Estado& est);
