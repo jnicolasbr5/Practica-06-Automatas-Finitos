@@ -11,6 +11,7 @@
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
+#include <limits>
 #include <sstream>
 #include <string>
 
@@ -23,10 +24,10 @@ void Automata::Read(std::ifstream& archivo_entrada) {
   std::getline(archivo_entrada, simbolos);
   InsertarSimbolos(simbolos);
   archivo_entrada >> numero_estados_; // Leo el número de estados
+  archivo_entrada.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Lee la siguiente linea
   std::string estados_iniciales;
   std::getline(archivo_entrada, estados_iniciales);
-  UnicoEstadoInicial(estados_iniciales); // Verifico un único estado
-  archivo_entrada >> estado_inicial_;
+  UnicoEstadoInicial(estados_iniciales); // Verifico un único estado inicial
   Estado state;
   while(archivo_entrada >> state) {
     estados_.push_back(state);
@@ -55,7 +56,7 @@ void Automata::UnicoEstadoInicial(const std::string& estados_iniciales) {
   std::istringstream ss(estados_iniciales);
   ss >> estado_inicial_; // Guardo el estado inicial
   std::string demas;
-  if (ss >> demas) {
+  if (ss >> demas) { // Error 1: Si hay más de un estado inicial, se lanza un error
     std::cerr << "Error: hay más de un estado inicial." << std::endl;
     exit(1); 
   }
@@ -63,7 +64,7 @@ void Automata::UnicoEstadoInicial(const std::string& estados_iniciales) {
 
 void Automata::InsertarSimbolos(const std::string& simbolos) {
   for (char c : simbolos) {
-    if (c == '&') { // Error & no puede pertenecer al
+    if (c == '&') { // Error 4: & no puede pertenecer al
       std::cerr << "ERROR:" << std::endl;
       std::cerr << "El carácter & no puede formar parte del alfabeto." << std::endl;
       exit(1);
