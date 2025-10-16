@@ -7,16 +7,6 @@
 // Autor: Juan Nicolás Becerra Rogatinscaia
 // Correo: alu0101743011@ull.edu.es
 // Fecha: 21/10/2025
-// Descripción Clase Alfabeto:
-// Representa un alfabeto que contiene símbolos.
-// Verifica si una cadena está formada por los símbolos del alfabeto
-// Estructura de datos principal:
-// - std::set<char> - almacena símbolos de manera ordenada
-// Historial de modificaciones:
-// Bug fix 1 - Corregida la llamada de funciones en sobrecargas.
-// Bug fix 2 - Añado IsEmpty() para vaciar el alfabeto al añadir uno nuevo.
-// Bug fix 3 - ComprobarAlfabetoCadena() verifica que los símbolos de las
-//             cadenas existen en el alfabeto
 
 #ifndef ESTADO_H
 #define ESTADO_H
@@ -26,14 +16,24 @@
 #include <set>
 #include <vector>
 
+
+/**
+ * @brief Representa un estado de un autómata finito.
+ * 
+ * Cada estado tiene un número que lo identifica, puede ser un estado de aceptación,
+ * contiene el número de transiciones y la estructura de datos de las transiciones.
+ * 
+ * Estructura de datos principal:
+ * - std::multimap<char, int> - almacena las transiciones de cada estado {símbolo, estado}
+ */
 class Estado {
   public:
-  Estado() = default;
+  // Constructor por defecto
+  Estado() = default; 
 
   // Algoritmo recursivo
   bool AlgoritmoCadenas(const std::string& cadena, std::vector<Estado>& vec, 
-                        const std::set<int> identificadores, int size, int i = 0);
-
+                        const std::set<int>& identificadores, int size, int i = 0);
 
   // Detección de errores
   void ComprobarSimbolosTransiciones(const std::set<char>& alfabeto) const;

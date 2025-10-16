@@ -7,16 +7,6 @@
 // Autor: Juan Nicolás Becerra Rogatinscaia
 // Correo: alu0101743011@ull.edu.es
 // Fecha: 21/10/2025
-// Descripción Clase Alfabeto:
-// Representa un alfabeto que contiene símbolos.
-// Verifica si una cadena está formada por los símbolos del alfabeto
-// Estructura de datos principal:
-// - std::set<char> - almacena símbolos de manera ordenada
-// Historial de modificaciones:
-// Bug fix 1 - Corregida la llamada de funciones en sobrecargas.
-// Bug fix 2 - Añado IsEmpty() para vaciar el alfabeto al añadir uno nuevo.
-// Bug fix 3 - ComprobarAlfabetoCadena() verifica que los símbolos de las
-//             cadenas existen en el alfabeto
 
 #ifndef AUTOMATA_H
 #define AUTOMATA_H
@@ -28,13 +18,27 @@
 
 #include "estado.h"
 
+/**
+ * @brief Representa un autómata finito.
+ * 
+ * Contiene el alfabeto de los símbolos con los que se puede transitar, el nº de estados,
+ * el estado inicial, un vector que contiene todos los objetos Estado del Automata y
+ * un set con los números identificativos de cada estado.
+ * 
+ * Estructura de datos principal:
+ * - std::vector<Estado> - almacena los objetos Estado del autómata.
+ * - std::set<int> - almacena los nº identificativos de cada estado.
+ */
 class Automata {
   public:
-  Automata() = default; // Constructor por defecto
+  // Constructor por defecto
+  Automata() = default; 
 
   // Leer automata
   void Read(std::ifstream& archivo_entrada);
   void LeerCadenas(std::ifstream& archivo_entrada);
+
+  // Cadena reconocida o no por el autómata
   bool ComprobarCadenas(const std::string& cadena);
   
   private:
@@ -42,15 +46,15 @@ class Automata {
     int numero_estados_;
     int estado_inicial_;
     std::vector<Estado> estados_;
-    std::set<int> identificadores_estados;
+    std::set<int> identificadores_estados_;
 
-    // Get/Set
+    // Get
     std::vector<Estado> GetEstados() const {return estados_;}
 
     // Push
     void InsertarSimbolos(const std::string& simbolos);
 
-    // Comprobar si hay error
+    // Comprobación de errores
     void UnicoEstadoInicial(const std::string& estados_iniciales);
     void LineaPorEstado(int numero_lineas, int numero_estados) const;
 };

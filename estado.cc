@@ -8,20 +8,25 @@
 // Correo: alu0101743011@ull.edu.es
 // Fecha: 21/10/2025
 
+#include <set>
 #include <sstream>
 #include <string>
-#include <set>
 #include <vector>
 
 #include "estado.h"
 
+/**
+ * @brief Lee los datos desde un flujo de entrada los datos del Estado
+ * 
+ * @param is Flujo de entrada desde el que se leen los datos
+ */
 void Estado::Read(std::istream& is) {
   is >> numero_identificador_;
   int aceptacion;
   is >> aceptacion;
   aceptacion_ = (aceptacion == 1); 
   is >> numero_transiciones_;
-  transiciones_.clear(); // Inicializa las transiciones de cada estado
+  transiciones_.clear(); // Reinicializa las transiciones de cada estado
   if (numero_transiciones_ != 0) { // Si el estado tiene transiciones
     char simbolo;
     int estado_destino; 
@@ -33,37 +38,89 @@ void Estado::Read(std::istream& is) {
   }
 }
 
+/**
+ * @brief Algoritmo recursivo que comprueba si una cadena es reconocida por el autómata
+ *        Tiene 2 casos base, uno si la cadena es leída y está en un estado de aceptación (true)
+ *        El otro caso base por si la cadena es leída y no está en un estado de aceptación (false)
+ *        Posteriormente hay 2 casos recursivos, primero se comprueban las transiciones por
+ *        cadenas vacías y después por símbolos del alfabeto.
+ *      
+ * @param cadena Cadena que reconoce o no el autómata
+ * @param vec Vector que almacena los objetos Estado del autómata
+ * @param identificadores Vector que almacena los nº identificadores de cada estado
+ * @param size Tamaño de la cadena
+ * @param i Número de transiciones
+ * @return true La cadena no es reconocida por el autómata
+ * @return false La cadena no es reconocida por el autómata
+ */
 bool Estado::AlgoritmoCadenas(const std::string& cadena, std::vector<Estado>& vec, 
-                              const std::set<int> identificadores, int size, int i) {
-  if (aceptacion_ && size == i) return true; // Si está en estado de aceptación y ha leído todos los símbolos
-  auto par = transiciones_.equal_range(cadena[i]);
-  for (auto iterador = par.first; iterador != par.second; iterador++) {
+                              const std::set<int>& identificadores, int size, int i) {
+  // Casos base
+  if (aceptacion_ && size == i) return true; 
+  if (!aceptacion_ && size == i) return false;
+
+  // Transiciones por epsilon, caso recursivo
+  auto par_epsilon = transiciones_.equal_range('&');
+  for (auto iterador = par_epsilon.first; iterador != par_epsilon.second; iterador++) {
     ComprobarSimbolosEstados(identificadores, iterador->second); // Comprobar error 5
     if (vec[iterador->second].AlgoritmoCadenas(cadena, vec, identificadores, size, i + 1)) {
       return true;
     } 
   }
-  return false;
+
+  // Transiciones por símbolos, caso recursivo
+  auto par = transiciones_.equal_range(cadena[i]);
+  for (auto iterador = par.first; iterador != par.second; iterador++) {
+    ComprobarSimbolosEstados(identificadores, iterador->second); // Comprobar error 5
+    if (vec[iterador->second].AlgoritmoCadenas(cadena, vec, identificadores, size, i + 1)) {
+      return true; // Cadena reconocida
+    } 
+  }
+  return false; // Cadena no reconocida 
 }
 
-void Estado::ComprobarSimbolosTransiciones(const std::set<char>& alfabeto) const { // Error 3
+/**
+ * @brief Comprueba que los símbolos de las transiciones existen en el alfabeto.
+ *        Se corresponde con el error 3).
+ * 
+ * @param alfabeto Set almacena los símbolos del alfabeto
+ */
+void Estado::ComprobarSimbolosTransiciones(const std::set<char>& alfabeto) const {
   for (const auto& par : transiciones_) { // Itero cada par
-    if (alfabeto.find(par.first) == alfabeto.end()) { // Si no está en el alfabeto, error
-      std::cerr << "ERROR:" << std::endl;
-      std::cerr << "El símbolo " << par.first << " no forma parte del alfabeto." << std::endl;
-      exit(1);
+    if (par.first != '&') { // La cadena vacía no puede estar en el alfabeto
+      if (alfabeto.find(par.first) == alfabeto.end()) { // Si el símbolo no está en el alfabeto, error
+        std::cerr << "ERROR:" << std::endl;
+        std::cerr << "El símbolo " << par.first << " no forma parte del alfabeto." << std::endl;
+        exit(3);
+      }
     }
   }
 }
 
-void Estado::ComprobarSimbolosEstados(const std::set<int>& identificadores, int ident) const { // Error 5
-  if (identificadores.find(ident) == identificadores.end()) {
-    std::cerr << "ERROR: " << std::endl; // Si no existe el estado, da error
-    std::cerr << "El estado '" << ident << "' al que se quiere transitar no es parte del autómata." << std::endl;
-    exit(1);
+/**
+ * @brief Comprueba si el estado al que se quiere transitar es parte del autómata. 
+ *        Si no lo es, muestra el error y sale del programa.
+ *        Se corresponde con el error 5)
+ *  
+ * @param identificadores Set que almacena los estados del autómata
+ * @param estado Estado al que se quiere transitar.
+ */
+void Estado::ComprobarSimbolosEstados(const std::set<int>& identificadores, int estado) const { // Error 5
+  if (identificadores.find(estado) == identificadores.end()) {
+    std::cerr << "ERROR: " << std::endl; // Si no existe el estado, muestra error
+    std::cerr << "El estado '" << estado << "' al que se quiere transitar no es parte del autómata." << std::endl;
+    exit(5);
   }
 }
 
+/**
+ * @brief Sobrecarga del operador de extracción para leer un objeto Estado por el flujo de entrada
+ *        Usa internamente el método Read.
+ * 
+ * @param is Flujo de entrada 
+ * @param est Objeto estado donde se almacenan los datos
+ * @return std::istream& Devuelve el flujo de entrada
+ */
 std::istream& operator>>(std::istream& is, Estado& est) {
   est.Read(is);
   return is;
