@@ -18,7 +18,8 @@
 // Bug fix 3 - ComprobarAlfabetoCadena() verifica que los símbolos de las
 //             cadenas existen en el alfabeto
 
-#pragma once
+#ifndef ESTADO_H
+#define ESTADO_H
 
 #include <iostream>
 #include <map>
@@ -44,3 +45,5 @@ class Estado{
 };
 
 std::istream& operator>>(std::istream& is, Estado& est);
+
+#endif

@@ -18,7 +18,8 @@
 // Bug fix 3 - ComprobarAlfabetoCadena() verifica que los símbolos de las
 //             cadenas existen en el alfabeto
 
-#pragma once 
+#ifndef AUTOMATA_H
+#define AUTOMATA_H
 
 #include <fstream>
 #include <set>
@@ -30,15 +31,11 @@
 class Automata {
   public:
   Automata() = default; // Constructor por defecto
-  //bool ComprobarCadenas(std::string& cadena);
-  //void MostrarCadenas(std::ifstream& fichero_cadenas);
 
   // Leer automata
   void Read(std::ifstream& archivo_entrada);
   void LeerCadenas(std::ifstream& archivo_entrada);
   bool ComprobarCadenas(const std::string& cadena);
-
-  
 
   private:
     std::set<char> alfabeto_;
@@ -55,3 +52,5 @@ class Automata {
     // Comprobar si hay error
     void UnicoEstadoInicial(const std::string& estados_iniciales);
 };
+
+#endif 

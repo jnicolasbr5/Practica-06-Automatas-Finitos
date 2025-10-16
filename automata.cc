@@ -31,7 +31,7 @@ void Automata::Read(std::ifstream& archivo_entrada) {
   while(archivo_entrada >> state) {
     estados_.push_back(state);
   }
-
+  
 }
 
 void Automata::LeerCadenas(std::ifstream& archivo_entrada) {
@@ -63,6 +63,11 @@ void Automata::UnicoEstadoInicial(const std::string& estados_iniciales) {
 
 void Automata::InsertarSimbolos(const std::string& simbolos) {
   for (char c : simbolos) {
-    alfabeto_.insert(c);
+    if (c == '&') { // Error & no puede pertenecer al
+      std::cerr << "ERROR:" << std::endl;
+      std::cerr << "El carácter & no puede formar parte del alfabeto." << std::endl;
+      exit(1);
+    }
+    if (c != ' ') alfabeto_.insert(c);
   }
 }
