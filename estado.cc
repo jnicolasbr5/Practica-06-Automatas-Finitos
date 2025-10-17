@@ -56,14 +56,24 @@ void Estado::Read(std::istream& is) {
 bool Estado::AlgoritmoCadenas(const std::string& cadena, std::vector<Estado>& vec, 
                               const std::set<int>& identificadores, int size, int i) {
   // Casos base
-  if (aceptacion_ && size == i) return true; 
-  if (!aceptacion_ && size == i) return false;
+  if (size == i) {
+    if (aceptacion_) return true; // Estado de aceptación
+    
+    // Comprueba que pueda haber una última transición vacía para llegar al estado de aceotación
+    auto par_epsilon = transiciones_.equal_range('&');
+    for (auto iterador = par_epsilon.first; iterador != par_epsilon.second; ++iterador) {
+      ComprobarSimbolosEstados(identificadores, iterador->second);
+      if (vec[iterador->second].AlgoritmoCadenas(cadena, vec, identificadores, size, i))
+        return true;
+    }
+    return false; // No es un estado de aceptación
+  }
 
   // Transiciones por epsilon, caso recursivo
   auto par_epsilon = transiciones_.equal_range('&');
   for (auto iterador = par_epsilon.first; iterador != par_epsilon.second; iterador++) {
     ComprobarSimbolosEstados(identificadores, iterador->second); // Comprobar error 5
-    if (vec[iterador->second].AlgoritmoCadenas(cadena, vec, identificadores, size, i + 1)) {
+    if (vec[iterador->second].AlgoritmoCadenas(cadena, vec, identificadores, size, i)) {
       return true;
     } 
   }
