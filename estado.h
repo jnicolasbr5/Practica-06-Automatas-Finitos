@@ -25,6 +25,9 @@
  * 
  * Estructura de datos principal:
  * - std::multimap<char, int> - almacena las transiciones de cada estado {símbolo, estado}
+ * 
+ * Historial de modificaciones:
+ * Bug fix 1 - El algoritmo me daba error 
  */
 class Estado {
   public:

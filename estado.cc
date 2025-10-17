@@ -39,9 +39,10 @@ void Estado::Read(std::istream& is) {
 }
 
 /**
- * @brief Algoritmo recursivo que comprueba si una cadena es reconocida por el autómata
+ * @brief Algoritmo recursivo que comprueba si una cadena es reconocida por el autómata.
  *        Tiene 2 casos base, uno si la cadena es leída y está en un estado de aceptación (true)
  *        El otro caso base por si la cadena es leída y no está en un estado de aceptación (false)
+ *        Junto a los casos base agregué que las transiciones finales puedan ser vacías. 
  *        Posteriormente hay 2 casos recursivos, primero se comprueban las transiciones por
  *        cadenas vacías y después por símbolos del alfabeto.
  *      
@@ -59,7 +60,7 @@ bool Estado::AlgoritmoCadenas(const std::string& cadena, std::vector<Estado>& ve
   if (size == i) {
     if (aceptacion_) return true; // Estado de aceptación
     
-    // Comprueba que pueda haber una última transición vacía para llegar al estado de aceotación
+    // Comprueba que pueda haber una última transición vacía para llegar al estado de aceptación
     auto par_epsilon = transiciones_.equal_range('&');
     for (auto iterador = par_epsilon.first; iterador != par_epsilon.second; ++iterador) {
       ComprobarSimbolosEstados(identificadores, iterador->second);

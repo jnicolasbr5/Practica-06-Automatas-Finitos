@@ -19,6 +19,8 @@
 // https://github.com/jnicolasbr5/Practica-06-Automatas-Finitos/tree/dia2
 // 16/10/2025 - Tercera versión del código -> 
 // https://github.com/jnicolasbr5/Practica-06-Automatas-Finitos/tree/dia3
+// 17/10/2025 - Cuarta versión del código -> 
+// https://github.com/jnicolasbr5/Practica-06-Automatas-Finitos/tree/dia4
 // Ejecución: ./p06_automata_simulator entrada2.fa entrada.txt
 
 #include <cstdlib>
