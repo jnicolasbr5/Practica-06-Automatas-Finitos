@@ -53,6 +53,7 @@ void MostrarAyuda() {
   exit(0);
 }
  
+// comentario
 
 /**
  * @brief Función principal que ejecuta el simulador de autómatas.
