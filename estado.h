@@ -36,7 +36,7 @@ class Estado {
 
   // Algoritmo recursivo
   bool AlgoritmoCadenas(const std::string& cadena, std::vector<Estado>& vec, 
-                        const std::set<int>& identificadores, int size, int i = 0);
+                        const std::set<int>& identificadores, int size,  bool trace, int i = 0);
 
   // Detección de errores
   void ComprobarSimbolosTransiciones(const std::set<char>& alfabeto) const;

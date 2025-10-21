@@ -47,12 +47,13 @@ void Automata::Read(std::ifstream& archivo_entrada) {
  * 
  * @param archivo_entrada Archivo .txt que contiene las cadenas
  */
-void Automata::LeerCadenas(std::ifstream& archivo_entrada) {
+void Automata::LeerCadenas(std::ifstream& archivo_entrada, bool trace) {
   std::string cadena;
   while(std::getline(archivo_entrada, cadena)) {
-    std::cout << cadena << " --- ";
-    if (ComprobarCadenas(cadena)) std::cout << "Accepted" << std::endl;
-    else std::cout << "Rejected" << std::endl;
+    std::cout << std::endl;
+    std::cout << cadena << " --- " << std::endl;
+    if (ComprobarCadenas(cadena, trace)) std::cout << cadena << " - Accepted" << std::endl;
+    else std::cout << cadena << " - Rejected" << std::endl;
   }
 }
 
@@ -65,11 +66,11 @@ void Automata::LeerCadenas(std::ifstream& archivo_entrada) {
  * @return true La cadena es reconocida por el autómata.
  * @return false La cadena no es reconocida por el autómata. 
  */
-bool Automata::ComprobarCadenas(const std::string& cadena) {
+bool Automata::ComprobarCadenas(const std::string& cadena, bool trace) {
   for (char c : cadena) { // Cadena no coincide con alfabeto
     if (alfabeto_.find(c) == alfabeto_.end()) return false; 
   }
-  return estados_[estado_inicial_].AlgoritmoCadenas(cadena, estados_, identificadores_estados_, cadena.size());
+  return estados_[estado_inicial_].AlgoritmoCadenas(cadena, estados_, identificadores_estados_, cadena.size(), trace);
 }
 
 /**

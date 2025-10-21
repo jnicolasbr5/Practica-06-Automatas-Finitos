@@ -72,13 +72,16 @@ void MostrarAyuda() {
  */
 int main(int argc, char* argv[]) {
   if (argc == 2 && std::string(argv[1]) == "--help") MostrarAyuda();
-  else if (argc != 3) MostrarError();
+  bool trace = false;
+  if (argc == 4 && (std::string(argv[3]) == "trace")) trace = true;
+  //else if (argc != 3) MostrarError();
   std::ifstream archivo_entrada(argv[1]);
   if (!archivo_entrada.is_open()) MostrarError(1);
   std::ifstream archivo_entrada_cadenas(argv[2]);
   if (!archivo_entrada_cadenas.is_open()) MostrarError(1);
   Automata nfa;
   nfa.Read(archivo_entrada);
-  nfa.LeerCadenas(archivo_entrada_cadenas);
+  nfa.LeerCadenas(archivo_entrada_cadenas, trace);
+  
   return 0;
 }

@@ -36,10 +36,10 @@ class Automata {
 
   // Leer automata
   void Read(std::ifstream& archivo_entrada);
-  void LeerCadenas(std::ifstream& archivo_entrada);
+  void LeerCadenas(std::ifstream& archivo_entrada, bool trace);
 
   // Cadena reconocida o no por el autómata
-  bool ComprobarCadenas(const std::string& cadena);
+  bool ComprobarCadenas(const std::string& cadena, bool trace);
   
   private:
     std::set<char> alfabeto_;

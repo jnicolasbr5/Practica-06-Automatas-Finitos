@@ -55,7 +55,7 @@ void Estado::Read(std::istream& is) {
  * @return false La cadena no es reconocida por el autómata
  */
 bool Estado::AlgoritmoCadenas(const std::string& cadena, std::vector<Estado>& vec, 
-                              const std::set<int>& identificadores, int size, int i) {
+                              const std::set<int>& identificadores, int size, bool trace, int i) {
   // Casos base
   if (size == i) {
     if (aceptacion_) return true; // Estado de aceptación
@@ -64,17 +64,34 @@ bool Estado::AlgoritmoCadenas(const std::string& cadena, std::vector<Estado>& ve
     auto par_epsilon = transiciones_.equal_range('&');
     for (auto iterador = par_epsilon.first; iterador != par_epsilon.second; ++iterador) {
       ComprobarSimbolosEstados(identificadores, iterador->second);
-      if (vec[iterador->second].AlgoritmoCadenas(cadena, vec, identificadores, size, i))
+      if (vec[iterador->second].AlgoritmoCadenas(cadena, vec, identificadores, size, trace, i))
         return true;
     }
     return false; // No es un estado de aceptación
+  }
+  std::set<int> conjunto;  
+
+  // Modificacion
+  if (trace) {
+    std::cout << "\nEstado actual: " << numero_identificador_ << std::endl;
+    std::cout << "Símbolo: " << cadena[i] << std::endl;
+    std::cout << "Posibles direcciones: " << std::endl;
+    for (auto it : transiciones_) {
+      std::cout << "(" << it.first << ", " << it.second << ")" << std::endl;
+      if (it.first == cadena[i]) conjunto.insert(it.second);
+    }
+    std::cout << "Conjunto de estados: {";
+    for (auto c : conjunto) {
+      std::cout <<  c  << ", ";
+    }
+    std::cout << "}" << std::endl;
   }
 
   // Transiciones por epsilon, caso recursivo
   auto par_epsilon = transiciones_.equal_range('&');
   for (auto iterador = par_epsilon.first; iterador != par_epsilon.second; iterador++) {
     ComprobarSimbolosEstados(identificadores, iterador->second); // Comprobar error 5
-    if (vec[iterador->second].AlgoritmoCadenas(cadena, vec, identificadores, size, i)) {
+    if (vec[iterador->second].AlgoritmoCadenas(cadena, vec, identificadores, size, trace, i)) {
       return true;
     } 
   }
@@ -83,7 +100,7 @@ bool Estado::AlgoritmoCadenas(const std::string& cadena, std::vector<Estado>& ve
   auto par = transiciones_.equal_range(cadena[i]);
   for (auto iterador = par.first; iterador != par.second; iterador++) {
     ComprobarSimbolosEstados(identificadores, iterador->second); // Comprobar error 5
-    if (vec[iterador->second].AlgoritmoCadenas(cadena, vec, identificadores, size, i + 1)) {
+    if (vec[iterador->second].AlgoritmoCadenas(cadena, vec, identificadores, size, trace, i + 1)) {
       return true; // Cadena reconocida
     } 
   }
